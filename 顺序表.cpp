@@ -6,7 +6,9 @@ typedef struct LNode *List;
 #define MAXSIZE 1000000
 struct LNode {
     ElementType Data[MAXSIZE];
-    Position Last;
+    Position Last;//Last代表最后一个位置的索引
+    //注意与MAXSIZE区分 一个是数组最大容量 一个是最后一个位置的索引
+    //这个顺序表存储了Last+1个元素
 };
 
 /* 初始化 */
@@ -14,8 +16,8 @@ List MakeEmpty()
 {
     List L;
 
-    L = (List)malloc(sizeof(struct LNode));
-    L->Last = -1;
+    L = (List)malloc(sizeof(struct LNode));//注意强制类型转换
+    L->Last = -1;//空顺序表
 
     return L;
 }
