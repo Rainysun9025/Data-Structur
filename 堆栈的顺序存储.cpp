@@ -3,6 +3,7 @@
 #include <stdbool.h>
 typedef int Position;
 #define  ElementType int
+
 struct SNode {
     ElementType *Data; /* 存储元素的数组 */
     Position Top;      /* 栈顶指针 */

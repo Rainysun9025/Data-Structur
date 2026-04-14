@@ -3,6 +3,7 @@
 #include <stdbool.h>
 typedef int Position;
 #define  ElementType int
+
 typedef struct SNode *PtrToSNode;
 struct SNode {
     ElementType Data;
