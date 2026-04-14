@@ -73,21 +73,16 @@ void printGList(GNode *l) {
    表的深度 = 1 + 所有子表元素深度的最大值
 */
 int depth(GNode *l) {
-    if (l == NULL) return 1;          /* 空表深度为1 */
-    if (l->tag == ATOM) return 0;     /* 原子深度为0 */
-    /* l 是子表节点，计算该子表内所有元素的深度最大值 */
+    if (l == NULL) return 1;
     int maxSubDepth = 0;
-    GNode *p = l->data.list;          /* 指向子表的第一个元素 */
+    GNode *p = l;
     while (p) {
-        int d;
-        if (p->tag == ATOM)
-            d = 0;
-        else
-            d = depth(p->data.list);  /* 递归求子表深度 */
+        int d = (p->tag == ATOM) ? 0 : depth(p->data.list);
+        //会一直往子表深处调用，直到子表无法再分，即只有原子
         if (d > maxSubDepth) maxSubDepth = d;
         p = p->next;
     }
-    return maxSubDepth + 1;           /* 本层深度加1 */
+    return maxSubDepth + 1;
 }
 
 /* 复制广义表 */
