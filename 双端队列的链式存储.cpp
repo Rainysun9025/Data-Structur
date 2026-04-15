@@ -26,8 +26,24 @@ struct QNode{
 struct QNode* CreatDeque()
 {
     struct QNode* Q=(struct QNode* )malloc(sizeof(struct QNode));
+    if(Q==NULL)
+    {
+        printf("内存不足\n");
+        return NULL;
+    }
     Q->front=(struct Node*)malloc(sizeof(struct Node));
+    if (Q->front == NULL) {
+    printf("内存不足\n");
+    free(Q);
+    return NULL;
+    }
     Q->rear=(struct Node* )malloc(sizeof(struct Node));
+    if (Q->rear == NULL) {
+        printf("内存不足\n");
+        free(Q->front);
+        free(Q);
+        return NULL;
+    }
     Q->front->next=Q->rear;
     Q->front->last=NULL;
     Q->rear->last=Q->front;
