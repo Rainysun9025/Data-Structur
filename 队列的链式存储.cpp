@@ -1,45 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#define  ElementType int
+
+#define ElementType int
 #define ERROR false
 
-typedef struct Node *PtrToNode;
-struct Node { /* 队列中的结点 */
+struct Node {
     ElementType Data;
-    PtrToNode Next;
+    struct Node *Next;
 };
-typedef PtrToNode Position;
 
 struct QNode {
-    Position Front, Rear;  /* 队列的头、尾指针 */
-    int MaxSize;           /* 队列最大容量 */
+    struct Node *Front;   // 队列的头指针
+    struct Node *Rear;    // 队列的尾指针
 };
-typedef struct QNode *Queue;
 
-bool IsEmpty( Queue Q )
-{
-    return ( Q->Front == NULL);
+bool IsEmpty(struct QNode *Q) {
+    return (Q->Front == NULL);
 }
 
-ElementType DeleteQ( Queue Q )
-{
-    Position FrontCell; 
+ElementType DeleteQ(struct QNode *Q) {
+    struct Node *FrontCell;
     ElementType FrontElem;
-    
-    if  ( IsEmpty(Q) ) {
+
+    if (IsEmpty(Q)) {
         printf("队列空");
         return ERROR;
-    }
-    else {
+    } else {
         FrontCell = Q->Front;
-        if ( Q->Front == Q->Rear ) /* 若队列只有一个元素 */
-            Q->Front = Q->Rear = NULL; /* 删除后队列置为空 */
-        else                     
+        if (Q->Front == Q->Rear)   // 若队列只有一个元素
+            Q->Front = Q->Rear = NULL; // 删除后队列置为空
+        else
             Q->Front = Q->Front->Next;
         FrontElem = FrontCell->Data;
 
-        free( FrontCell );  /* 释放被删除结点空间  */
-        return  FrontElem;
+        free(FrontCell);   // 释放被删除结点空间
+        return FrontElem;
     }
+}
+
+bool AddQ(struct QNode *Q, ElementType X) {
+    struct Node *NewNode = (struct Node *)malloc(sizeof(struct Node));
+    if (NewNode == NULL) {
+        printf("内存不足\n");
+        return false;
+    }
+    NewNode->Data = X;
+    NewNode->Next = NULL;
+
+    // 如果队列为空，则头尾都指向新结点
+    if (IsEmpty(Q)) {
+        Q->Front = Q->Rear = NewNode;
+    } else {
+        Q->Rear->Next = NewNode;   // 原队尾的next指向新结点
+        Q->Rear = NewNode;         // 更新队尾指针
+    }
+    return true;
 }
