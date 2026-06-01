@@ -59,7 +59,7 @@ LGraph CreateGraph( int VertexNum )
     return Graph;
 }
 
-/* ================= 插入边（来自图3） ================= */
+/* ================= 插入边================= */
 void InsertEdge( LGraph Graph, Edge E )
 {
     PtrToAdjVNode NewNode;
