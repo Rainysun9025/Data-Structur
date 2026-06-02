@@ -4,7 +4,7 @@
 #define MAXN 1005    // 最大点数
 #define MAXM 10005   // 最大边数（无向图要开两倍）
 
-int head[MAXN];      // head[u] = 以 u 为起点的第一条边的编号
+int head[MAXN];      // head[u] = 以 u 为起点的第一条边的编号 //实际上,就是最后一插入进来的边的编号
 int to[MAXM];        // to[i]   = 第 i 条边指向的点
 int nxt[MAXM];       // nxt[i]  = 和第 i 条边同起点的下一条边编号
 int idx;             // 当前已经用了多少条边（每加一条 idx++）
