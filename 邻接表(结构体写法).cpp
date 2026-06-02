@@ -10,18 +10,19 @@ typedef int DataType;          // 顶点数据，可以是任意类型
 /* ================= 结构体定义 ================= */
 typedef struct AdjVNode *PtrToAdjVNode;
 struct AdjVNode {
-    Vertex AdjV;          /* 邻接点下标 */
+    Vertex AdjV;          /* 一条边指向的邻接点下标 */   //比如 V1-->V2  这里存储的就是V2
     WeightType Weight;    /* 边权重 */
     PtrToAdjVNode Next;   /* 指向下一条边的指针 */
 };
 
 typedef struct Vnode{
-    PtrToAdjVNode FirstEdge;  /* 指向第一条边的指针 */
+    PtrToAdjVNode FirstEdge;  /* 指向第一条边的指针 */   //最后插入进来的边
     DataType Data;            /* 存顶点的数据 */
 } AdjList[MaxVertexNum];      /* AdjList是邻接表类型 */
+//AdjList指的是 元素为 struct Vnode，长度为 MaxVertexNum 的数组
 
 typedef struct GNode *PtrToGNode;
-struct GNode {
+struct GNode {//总体
     int Nv;               /* 顶点数 */
     int Ne;               /* 边数 */
     AdjList G;            /* 邻接表 */
@@ -70,8 +71,8 @@ void InsertEdge( LGraph Graph, Edge E )
     NewNode->AdjV = E->V2;
     NewNode->Weight = E->Weight;
     /* 将V2插入V1的表头（头插法） */
-    NewNode->Next = Graph->G[E->V1].FirstEdge;
-    Graph->G[E->V1].FirstEdge = NewNode;
+    NewNode->Next = Graph->G[E->V1].FirstEdge;//先保存节点V1已经插好的数据到新节点的Next里面
+    Graph->G[E->V1].FirstEdge = NewNode;//再把节点V1指向新节点
 
     /********** 若是无向图，还要插入边 <V2, V1> **********/
     /* 为V1建立新的邻接点 */
