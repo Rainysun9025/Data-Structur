@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+
+/* 哈夫曼树节点（三叉链表） */
+typedef struct {
+    int weight;
+    int parent, lchild, rchild;
+} HTNode, *HuffmanTree;
+
+/* 在 HT[1..n] 中选出两个 parent==0 且权值最小的节点，下标存入 s1, s2 */
+void Select(HuffmanTree HT, int n, int *s1, int *s2) {
+    int min1 = INT_MAX, min2 = INT_MAX;
+    *s1 = *s2 = 0;
+
+    for (int i = 1; i <= n; ++i) {
+        if (HT[i].parent == 0) {          // 尚未被合并
+            if (HT[i].weight < min1) {
+                min2 = min1;  *s2 = *s1;  // 原来的最小降级为次小
+                min1 = HT[i].weight; *s1 = i;
+            } else if (HT[i].weight < min2) {
+                min2 = HT[i].weight; *s2 = i;
+            }
+        }
+    }
+}
+
+/* 构建哈夫曼树 */
+/* w[0..n-1] 是 n 个叶子权值，结果通过 HT 返回 */
+void CreateHuffmanTree(HuffmanTree *HT, int w[], int n) {
+    if (n <= 1) return;
+    int m = 2 * n - 1;                    // 总节点数
+    *HT = (HuffmanTree)malloc((m + 1) * sizeof(HTNode)); // 0号单元不用
+
+    /* 初始化叶子节点 */
+    for (int i = 1; i <= n; ++i) {
+        (*HT)[i].weight = w[i-1];
+        (*HT)[i].parent = (*HT)[i].lchild = (*HT)[i].rchild = 0;
+    }
+    /* 初始化内部节点 */
+    for (int i = n + 1; i <= m; ++i) {
+        (*HT)[i].weight = 0;
+        (*HT)[i].parent = (*HT)[i].lchild = (*HT)[i].rchild = 0;
+    }
+
+    /* 构建树：每次选两个最小的合并 */
+    for (int i = n + 1; i <= m; ++i) {
+        int s1, s2;
+        Select(*HT, i - 1, &s1, &s2);     // 在前 i-1 个节点中选
+        
+        (*HT)[s1].parent = (*HT)[s2].parent = i;
+        (*HT)[i].lchild = s1;
+        (*HT)[i].rchild = s2;
+        (*HT)[i].weight = (*HT)[s1].weight + (*HT)[s2].weight;
+    }
+}
